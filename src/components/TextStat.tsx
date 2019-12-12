@@ -5,7 +5,7 @@ const { Title } = Typography;
 
 interface StatInfo {
   headline: string;
-  value: string;
+  value: string | number;
   color: string;
 }
 
