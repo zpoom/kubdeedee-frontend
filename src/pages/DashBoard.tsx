@@ -37,6 +37,7 @@ export default (props: any) => {
   const [isWarning, setIsWarning] = useState<number>(0);
   const [buttonText, setButtonText] = useState<string>("ALERT");
   const [time, setTime] = useState<number>(1);
+  const [yawn, setYawn] = useState<number>(0);
   let db = app.database().ref();
   // .limitToLast(1000);
   useEffect(() => {
@@ -52,6 +53,10 @@ export default (props: any) => {
       setTime(time + 10);
       data.push(heartRatePayload);
       console.log(data);
+    });
+    db.on("value", snap => {
+      setYawn(snap.val().Yawn);
+      console.log(snap.val().Yawn);
     });
   };
 
@@ -78,7 +83,7 @@ export default (props: any) => {
           LIVE VIDEO
         </Col>
         <Col span={6}>
-          <TextStat headline="Status" value="Active"></TextStat>
+          <TextStat headline="Yawn" value={yawn}></TextStat>
         </Col>
         <Col span={6}>
           <Link to="/sound">
