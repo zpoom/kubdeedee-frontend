@@ -7,6 +7,7 @@
   background-color: #27ae60;
   width: 100vw;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+  color: "black" !important;
 }
 
 .icon {
@@ -57,4 +58,37 @@
 .video {
   background: pink;
   height: 60vh;
+}
+
+.line {
+  fill: none;
+  stroke: #ffab00;
+  stroke-width: 1;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.dot {
+  fill: #ffab00;
+  stroke: #fff;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
+#heart-rate {
+  width: 100vw;
+  height: 100vh;
+  margin-left: 5vw;
+  margin-top: 15vh;
+}
+
+.current-heart-rate {
+  margin-top: 20vh;
+  margin-left: 5vw;
 }

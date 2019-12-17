@@ -6,14 +6,13 @@ const { Title } = Typography;
 interface StatInfo {
   headline: string;
   value: string | number;
-  color: string;
 }
 
-export default ({ headline, value, color }: StatInfo) => {
+export default ({ headline, value }: StatInfo) => {
   return (
-    <div className="stat-box" style={{ background: `color` }}>
+    <div className="stat-box">
       <Title level={2}>{headline}</Title>
-      <div>{value}</div>
+      <div style={{ color: "black", fontSize: "4vh" }}>{value}</div>
     </div>
   );
 };

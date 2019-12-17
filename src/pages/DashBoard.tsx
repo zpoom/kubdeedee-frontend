@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { TextStat } from "../components";
-import { Row, Col, Typography } from "antd";
+import { Row, Col, Typography, Switch, Button } from "antd";
+import { Link } from "react-router-dom";
+import { app } from "../const";
+import HeartRate from "./HeartRate";
 
 const { Title } = Typography;
 
@@ -20,12 +23,51 @@ const USER_STAT: Stat = {
   possibility: 0.5,
   heartRate: 70
 };
+
+interface HeartRate {
+  time: number;
+  value: number;
+}
 export default (props: any) => {
   const [user, setUser] = useState<any>({});
+  const [data, setData] = useState<any>([{}]);
+  const [heartRate, setHeartRate] = useState<Array<HeartRate>>([]);
+  const [heartRateAvg, setHeartRateAvg] = useState<number>(0);
+  const [sumHeartRate, setSumHeartRate] = useState<number>(0);
+  const [isWarning, setIsWarning] = useState<number>(0);
+  const [buttonText, setButtonText] = useState<string>("ALERT");
+  const [time, setTime] = useState<number>(1);
+  let db = app.database().ref();
+  // .limitToLast(1000);
   useEffect(() => {
-    setUser(USER_STAT);
+    // setUser(USER_STAT);
+    getData();
   }, []);
+  const getData = () => {
+    db.on("child_added", snap => {
+      let heartRatePayload = {
+        value: snap.val().HeartRateSensor,
+        time: time
+      };
+      setTime(time + 10);
+      data.push(heartRatePayload);
+      console.log(data);
+    });
+  };
 
+  const handleOnClick = () => {
+    if (isWarning === 0) {
+      setButtonText("STOP");
+      setIsWarning(1);
+    } else {
+      setButtonText("ALERT");
+      setIsWarning(0);
+    }
+    app
+      .database()
+      .ref()
+      .update({ alert: isWarning });
+  };
   return (
     <div style={{ marginTop: "20vh" }}>
       <Title level={1} style={{ marginLeft: "5vw" }}>
@@ -36,28 +78,28 @@ export default (props: any) => {
           LIVE VIDEO
         </Col>
         <Col span={6}>
-          <TextStat
-            headline="Status"
-            value={user.status}
-            color="red"
-          ></TextStat>
+          <TextStat headline="Status" value="Active"></TextStat>
         </Col>
         <Col span={6}>
-          <TextStat
-            headline="Possibility"
-            value={user.possibility}
-            color="green"
-          ></TextStat>
+          <Link to="/sound">
+            <TextStat headline="Sound" value="test"></TextStat>
+          </Link>
         </Col>
         <Col span={6}>
-          <TextStat
-            headline="Heart Rate"
-            value={user.heartRate}
-            color="red"
-          ></TextStat>
+          <Link to="/heart-rate">
+            <TextStat headline="Heart Rate" value="test"></TextStat>
+          </Link>
         </Col>
         <Col span={6}>
-          <TextStat headline="#Yawn" value={user.yawn} color="red"></TextStat>
+          <Button
+            type="danger"
+            size="large"
+            onClick={() => {
+              handleOnClick();
+            }}
+          >
+            {buttonText}
+          </Button>
         </Col>
       </Row>
     </div>

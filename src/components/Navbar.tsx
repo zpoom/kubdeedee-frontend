@@ -1,6 +1,7 @@
 import React, { useState, FC } from "react";
 import { Icon, Typography, Drawer, Divider } from "antd";
 import { MENU_ITEMS } from "../const";
+import { Link } from "react-router-dom";
 
 export default () => {
   const { Title } = Typography;
@@ -40,7 +41,7 @@ export default () => {
   return (
     <div className="navbar">
       <Title level={1} className="icon">
-        KUBDEEDEE
+        <span>KUBDEEDEE</span>
         <Icon
           type="menu"
           className="nav-menu"
