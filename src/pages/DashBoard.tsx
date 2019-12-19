@@ -31,10 +31,10 @@ interface HeartRate {
 export default (props: any) => {
   const [user, setUser] = useState<any>({});
   const [data, setData] = useState<any>([{}]);
-  const [heartRate, setHeartRate] = useState<Array<HeartRate>>([]);
   const [heartRateAvg, setHeartRateAvg] = useState<number>(0);
-  const [sumHeartRate, setSumHeartRate] = useState<number>(0);
+  const [soundAvg, setSoundAvg] = useState<number>(0);
   const [isWarning, setIsWarning] = useState<number>(0);
+  const [img, setImg] = useState<string>("https://picsum.photos/600/400");
   const [buttonText, setButtonText] = useState<string>("ALERT");
   const [time, setTime] = useState<number>(1);
   const [yawn, setYawn] = useState<number>(0);
@@ -45,18 +45,22 @@ export default (props: any) => {
     getData();
   }, []);
   const getData = () => {
-    db.on("child_added", snap => {
-      let heartRatePayload = {
-        value: snap.val().HeartRateSensor,
-        time: time
-      };
-      setTime(time + 10);
-      data.push(heartRatePayload);
-      console.log(data);
-    });
     db.on("value", snap => {
-      setYawn(snap.val().Yawn);
+      if (snap.val().Yawn === undefined) setYawn(0);
+      else setYawn(snap.val().Yawn);
       console.log(snap.val().Yawn);
+
+      if (snap.val().avgHeartRate === undefined) setHeartRateAvg(0);
+      else setHeartRateAvg(snap.val().avgHeartRate);
+      console.log(snap.val().avgHeartRate);
+
+      if (snap.val().avgSoundRate === undefined) setSoundAvg(0);
+      else setSoundAvg(snap.val().avgSoundRate);
+      console.log(snap.val().avgSoundRate);
+
+      if (snap.val().url === undefined) setImg("https://picsum.photos/600/400");
+      else setImg(snap.val().url);
+      console.log(snap.val().url);
     });
   };
 
@@ -79,20 +83,26 @@ export default (props: any) => {
         {props.match.params.name}
       </Title>
       <Row gutter={64} style={{ marginLeft: "5vw" }}>
-        <Col span={10} className="video">
-          LIVE VIDEO
+        <Col span={10} style={{ marginTop: "5vh" }}>
+          <img
+            src={img}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%"
+            }}
+          ></img>
         </Col>
         <Col span={6}>
           <TextStat headline="Yawn" value={yawn}></TextStat>
         </Col>
         <Col span={6}>
           <Link to="/sound">
-            <TextStat headline="Sound" value="test"></TextStat>
+            <TextStat headline="Sound" value={soundAvg}></TextStat>
           </Link>
         </Col>
         <Col span={6}>
           <Link to="/heart-rate">
-            <TextStat headline="Heart Rate" value="test"></TextStat>
+            <TextStat headline="Heart Rate" value={heartRateAvg}></TextStat>
           </Link>
         </Col>
         <Col span={6}>

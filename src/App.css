@@ -62,7 +62,7 @@
 
 .line {
   fill: none;
-  stroke: #ffab00;
+  stroke: #a4de02;
   stroke-width: 1;
 }
 
@@ -72,7 +72,7 @@
 }
 
 .dot {
-  fill: #ffab00;
+  fill: #a4de02;
   stroke: #fff;
 }
 

@@ -45,7 +45,10 @@ export default (props: any) => {
 
   useInterval(() => {
     getData();
-  }, 1000);
+  }, 3000);
+  useEffect(() => {
+    getData();
+  }, []);
 
   function useInterval(callback: any, delay: any) {
     const savedCallback: any = useRef();
@@ -73,7 +76,7 @@ export default (props: any) => {
     if (props.type === "heart-rate") {
       db.on("child_added", snap => {
         if (
-          parseInt(snap.val().HeartRateSensor) >= 2800 &&
+          parseInt(snap.val().HeartRateSensor) >= 2750 &&
           num.test(snap.val().HeartRateSensor) &&
           num.test(snap.val().time)
         ) {
